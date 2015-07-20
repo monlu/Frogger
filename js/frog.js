@@ -58,7 +58,7 @@ _.extend(Frog.prototype, {
         this.xPos = this.x * this.cellSize
         this.yPos = this.y * this.cellSize
         this.direction = Math.PI;
-        game.scoreCeil = 14
+        game.scoreCeil = game.yHeight
         game.lives.splice((game.lives.length - 1), 1)
         console.log("life was lost")
     },

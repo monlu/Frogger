@@ -1,3 +1,4 @@
+//Basic description of the log object.
 function Log (lane, xPos, length) {
 	this.y = lane.y
 	this.speed = lane.speed
