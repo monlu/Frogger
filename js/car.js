@@ -18,6 +18,7 @@ _.extend(Car.prototype, {
 
 		c.beginPath();
 		c.save();
+		//The car is rendered by creating two vertical rectangles and superimposing a horizontal one over them.
 		c.translate( this.xPos, this.y * game.cellSize + (game.cellSize/2))
 		c.fillStyle = 'grey'
 		c.fillRect(5, -game.cellSize/3, 15, game.cellSize*2/3);
