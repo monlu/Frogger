@@ -1,3 +1,4 @@
+//The car model for the road lanes.
 function Car (lane, xPos) {
 	this.speed = lane.speed
 	this.direction = lane.direction
@@ -16,7 +17,6 @@ _.extend(Car.prototype, {
 		this.yPos = this.y * game.cellSize
 
 		c.beginPath();
-		// c.fillRect(this.xPOS*game.cellSize, that.y*game.cellSize , 2*game.cellSize, game.cellSize);
 		c.save();
 		c.translate( this.xPos, this.y * game.cellSize + (game.cellSize/2))
 		c.fillStyle = 'grey'
@@ -26,7 +26,6 @@ _.extend(Car.prototype, {
 		c.fillStyle = this.color
 		c.fillRect(0, -game.cellSize/4, game.cellSize*1.5, game.cellSize/2);
 		
-		// c.fillRect =(5, -game.cellSize/2, 15, game.cellSize)
 		c.stroke();
 		c.restore();
 

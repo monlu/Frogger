@@ -19,6 +19,8 @@ var Wrappable = {
   	var game = window.game
     var width = game.canvas.width;
     var x = this.xPos
+    //if the xPosition of the object is greater than the width of the game, 
+    // it transports it to otherside 2.5 * cellsize removed fromt he screen.
     if (x > width + game.cellSize) {
     	this.xPos = -game.cellSize * 2.5
     } else if ( x < -game.cellSize * 2.5 ) {
@@ -27,7 +29,7 @@ var Wrappable = {
   }
 };
 
-// Collision detection of rectangles.
+// Collision detection using rectangle method.
 var Collidable = {
   collide: function (otherObj) {
 
