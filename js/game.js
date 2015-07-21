@@ -7,73 +7,17 @@ function Game () {
 	//Create a new Frog object.
 	this.frog = new Frog (this.cellSize)
 
-	//Generates the lanes for the game and puts them in an array.
-	//Since the height of the grid is 14, there are 14 lanes.
-	this.lanes = []
-	for (var i = 0; i < this.yHeight; i++) {
-		this.lanes.push(new Lane (i))
-	}
-
-	//Array storage for other models that exist in the game.
-	this.cars = []
-	this.lilipads = []
-	this.logs = []
-	this.lilywins = []
-	this.lives = []
-	
 	//Adds 3 lives at the start of the game.
+	this.lives = []
 	for (var j = 0; j < 3 ; j ++) {
 		this.lives.push(new Life (j))
 	}
 
-	//Base length of the logs generated in game.
-	var transportLength = 3
-
-	//Generates a random starting position for each model (Log, Lilypad, Car) on the left half of the screen.
-	var startingPos = Math.ceil(Math.random()*this.xWidth/2)* this.cellSize
-	//iterating over each lane to generate the appropriate models.
-	for (var j = 0; j < 13; j++) {
-		//random distance variable generated for cars
-		var distanceVar = Math.random()*2+1.5
-
-		//Landing on lilywins are the objective of the game. They are on the last lane.
-		if ( j == 0 ) {
-			for ( var k = 0; k < 10; k++ ) {
-				this.lilywins.push(new LilyWin(50 + k * this.cellSize * 2))
-			}
-		//Logs are generated on lines 1,3,4
-		} else if ( j == 1 || j == 3 || j == 4) {
-			for (var k = 0; k < 3; k++){
-				//sets the distance of each log relative to the first log generated on each lane.
-				var logDistance = k * this.cellSize * (transportLength + 3)
-				this.logs.push(new Log (this.lanes[j], startingPos + logDistance, transportLength))
-			}
-		//Lilypads are generated on lines 2,5
-		} else if (j == 2 || j == 5) {
-			for (var k = 0; k < 3; k++) {
-				var padDistance = k * this.cellSize * (transportLength + 1)
-				this.logs.push(new Lilipad (this.lanes[j], startingPos + padDistance))
-			}
-		} 
-		//empty lane
-		else if (j == 6) {}
-
-		//Renders cars on the remaining lanes.
-		else {
-			for (var k = 0; k < this.lanes[j].cars.length; k++){
-
-
-				var carDistance = k * this.cellSize * (1.5 + distanceVar)
-				this.cars.push(new Car(this.lanes[j], startingPos + carDistance ))
-			}
-		}
-
-		//Tracks the score and generates the fly for bonus points.
-		this.fly = new Fly(this)
-		this.score = 0
-		//the scoreCeil exists to register points when the frog progresses further in the game.
-		this.scoreCeil = this.yHeight
-	}
+	//Tracks the score and generates the fly for bonus points.
+	this.fly = new Fly(this)
+	this.score = 0
+	//the scoreCeil exists to register points when the frog progresses further in the game.
+	this.scoreCeil = this.yHeight
 
 	//the river that is generated. landing in this area results in a loss of a life.
 	this.river = {
@@ -86,8 +30,69 @@ function Game () {
 
 //Functions added to the game prototype.
 _.extend(Game.prototype, {
+	//Generates the game.
+	generate: function () {
+		
+		//Since the height of the grid is 14, there are 14 lanes.
+		this.lanes = []
+		for (var i = 0; i < this.yHeight; i++) {
+			this.lanes.push(new Lane (i))
+		}
+
+		//Array storage for other models that exist in the game.
+		this.cars = []
+		this.lilipads = []
+		this.logs = []
+		this.lilywins = []
+		
+
+		//Base length of the logs generated in game.
+		var transportLength = 3
+
+		//Generates a random starting position for each model (Log, Lilypad, Car) on the left half of the screen.
+		var startingPos = Math.ceil(Math.random()*this.xWidth/2)* this.cellSize
+		//iterating over each lane to generate the appropriate models.
+		for (var j = 0; j < 13; j++) {
+			//random distance variable generated for cars
+			var distanceVar = Math.random()*2+1.5
+
+			//Landing on lilywins are the objective of the game. They are on the last lane.
+			if ( j == 0 ) {
+				for ( var k = 0; k < 10; k++ ) {
+					this.lilywins.push(new LilyWin(50 + k * this.cellSize * 2))
+				}
+			//Logs are generated on lines 1,3,4
+			} else if ( j == 1 || j == 3 || j == 4) {
+				for (var k = 0; k < 3; k++){
+					//sets the distance of each log relative to the first log generated on each lane.
+					var logDistance = k * this.cellSize * (transportLength + 3)
+					this.logs.push(new Log (this.lanes[j], startingPos + logDistance, transportLength))
+				}
+			//Lilypads are generated on lines 2,5
+			} else if (j == 2 || j == 5) {
+				for (var k = 0; k < 3; k++) {
+					var padDistance = k * this.cellSize * (transportLength + 1)
+					this.logs.push(new Lilipad (this.lanes[j], startingPos + padDistance))
+				}
+			} 
+			//empty lane
+			else if (j == 6) {}
+
+			//Renders cars on the remaining lanes.
+			else {
+				for (var k = 0; k < this.lanes[j].cars.length; k++){
+
+
+					var carDistance = k * this.cellSize * (1.5 + distanceVar)
+					this.cars.push(new Car(this.lanes[j], startingPos + carDistance ))
+				}
+			}
+
+		}
+	},
 	ready: function () {
 		var that = this
+		this.generate();
 		//grabs the canvas element in the html document and renders the game.
 		this.canvas = document.getElementById('game');
 		this.ctx = this.canvas.getContext('2d')
@@ -151,6 +156,9 @@ _.extend(Game.prototype, {
 				frog.xPos = frog.x * game.cellSize
 				frog.yPos = frog.y * game.cellSize
 				game.scoreCeil = game.yHeight
+				game.generate();
+				clearInterval(window.interval)
+				game.render();
 			}, 90)
 		
 		}
