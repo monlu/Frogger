@@ -16,4 +16,4 @@ I use the built-in canvas methods to sketch and render each object.
 
 ## Goal
 
-The goal of the game is to keep landing on the lilypad at the top of the screen.
+The goal of the game is to keep landing on the lilypad at the top of the screen. Once you have reached the end the objects will reset.
